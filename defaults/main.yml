@@ -1,0 +1,39 @@
+---
+# basic systemd unit configuration
+glauth_service: no
+glauth_start: no
+glauth_autostart: no
+# update if you'd prefer a user unit or similar
+glauth_service_file: /etc/systemd/system/glauth.service
+# will not be created if missing
+glauth_service_user: glauth
+glauth_service_group: glauth
+# if you add an /etc/default/glauth as an env file with AWS_ACCESS_KEY_ID and
+# AWS_SECRET_ACCESS_KEY, you can use an s3 url for the config path
+glauth_config_path: /etc/glauth/glauth.cfg
+
+# update permissions to allow non-root users to run on low numbered ports
+glauth_setcap: yes
+glauth_path: /usr/local/bin/glauth
+glauth_version: v1.1.1
+glauth_architecture: "{{ ansible_facts['architecture'] }}"
+
+# url/hash pairs per architecture
+glauth_releases:
+  v1.1.1:
+    arm32:
+      - https://github.com/glauth/glauth/releases/download/v1.1.1/glauth-arm32
+      - sha256:4ec4f1c840cc3bc716c99f00db4c9691b56c73c2bcf16f7b1b666fd500a8496f
+    arm64:
+      - https://github.com/glauth/glauth/releases/download/v1.1.1/glauth-arm64
+      - sha256:43f5cfa344c0ec5703338baf10dae273f8de12e56826fa517a6fc3e3eb4f400a
+    i386:
+      - https://github.com/glauth/glauth/releases/download/v1.1.1/glauth32
+      - sha256:060300253f824d12f02e2722bd42c574957cb977ac91d9dc4ae667770d1b4293
+    x86_64:
+      - https://github.com/glauth/glauth/releases/download/v1.1.1/glauth64
+      - sha256:ff8b1a82052c9bd8f380fdb23f63523c0a1b145d592a962c88b6461434ed86e9
+
+# if you'd like, you can replace this with an array of the url and checksum,
+# and ignore version, architecture and release definitions above
+glauth_release: "{{ glauth_releases[glauth_version][glauth_architecture] }}"

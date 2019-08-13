@@ -1,0 +1,13 @@
+---
+- name: download the glauth binary
+  get_url:
+    url: "{{ glauth_release[0] }}"
+    checksum: "{{ glauth_release[1] }}"
+    dest: "{{ glauth_path }}"
+    mode: 0755
+
+- name: configure capabilities for low port privileges
+  capabilities:
+    path: "{{ glauth_path }}"
+    capability: cap_net_bind_service+ep
+    state: "{{ glauth_setcap | ternary('present', 'absent') }}"

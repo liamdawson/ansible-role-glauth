@@ -1,0 +1,6 @@
+---
+- name: install glauth binary
+  import_tasks: install.yml
+
+- name: configure systemd service
+  import_tasks: service.yml

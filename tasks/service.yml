@@ -1,0 +1,13 @@
+---
+- name: create unit file
+  when: glauth_service
+  template:
+    src: glauth.service.j2
+    dest: "{{ glauth_service_file }}"
+
+- name: update service enabled/started
+  when: glauth_service or glauth_autostart
+  systemd:
+    name: glauth
+    enabled: "{{ glauth_autostart }}"
+    state: "{{ glauth_start | ternary('started', omit) }}"

@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description="glauth LDAP server"
+After=network.target
+
+[Service]
+KillMode=process
+Restart=on-failure
+ExecStart={{ glauth_path }} --config "{{ glauth_config_path }}"
+EnvironmentFile=-/etc/default/glauth
+User={{ glauth_service_user }}
+Group={{ glauth_service_group }}
+
+[Install]
+WantedBy=multi-user.target
